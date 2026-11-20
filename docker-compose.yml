@@ -1,0 +1,21 @@
+services:
+  shared-services-db:
+    image: mysql:8.4
+    container_name: npst-shared-services-db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root_local_password
+      MYSQL_DATABASE: npst_shared_services
+      MYSQL_USER: shared_app
+      MYSQL_PASSWORD: shared_local_password
+    ports:
+      - "3309:3306"
+    volumes:
+      - shared_services_mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-proot_local_password"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+volumes:
+  shared_services_mysql_data:
